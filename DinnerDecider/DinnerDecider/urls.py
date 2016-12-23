@@ -23,6 +23,9 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'users', accView.UserViewSet)
 router.register(r'stores', stoView.StoreViewSet)
+router.register(r'storetype', stoView.StoreTypeViewSet)
+router.register(r'area', stoView.AreaViewSet)
+router.register(r'storephoto', stoView.StorePhotoViewSet)
 #router.register(r'stores', store_views.StoreViewSet)
 
 
