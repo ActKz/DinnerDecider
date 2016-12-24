@@ -128,7 +128,7 @@ REST_FRAMEWORK = {
 	    ),
 	    # 必須登入才能使用。
 	    'DEFAULT_PERMISSION_CLASSES': (
-	        'rest_framework.permissions.IsAuthenticated',
+#        'rest_framework.permissions.IsAuthenticated',
 	    ),
 #           'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly']
 #            ('rest_framework.permissions.IsAdminUser',),
