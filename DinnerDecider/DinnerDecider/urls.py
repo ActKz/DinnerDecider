@@ -19,6 +19,15 @@ from account import views as accView
 from store import views as stoView
 #from store import store_views
 from rest_framework import routers
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from rest_framework_swagger.views import get_swagger_view
+from django.contrib.auth.models import User
+from account.serializers import PasswordSerializer
+#from flask import Flask
+#from .schema import schema_view
+
+
+schema_view = get_swagger_view(title='Fxck API')
 
 router = routers.DefaultRouter()
 router.register(r'users', accView.UserViewSet)
@@ -34,4 +43,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^api-token-refresh/', refresh_jwt_token),
+    url(r'^swagger/', schema_view),
+    url(r'^docs/', include('rest_framework_docs.urls')),
 ]

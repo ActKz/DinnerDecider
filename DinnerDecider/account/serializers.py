@@ -3,8 +3,16 @@ from rest_framework import serializers, permissions
 from account.models import User
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'username', 'email','password')
+class UserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    email = serializers.EmailField()
+    password = serializers.CharField()
+#   class Meta:
+#       model = User
+#       fields = ('username', 'email','password')
 
+class PasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(max_length=20)
+#   class Meta:
+#       model = User
+#       fields = ('password')

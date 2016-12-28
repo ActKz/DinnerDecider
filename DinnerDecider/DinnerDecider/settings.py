@@ -40,9 +40,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'account',
     'store',
+    'corsheaders',
+    'rest_framework_swagger',
+    'rest_framework_docs',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -125,12 +129,18 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': (
 	        'rest_framework.authentication.SessionAuthentication',
+                'rest_framework.authentication.BasicAuthentication',
+                'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
 	    ),
 	    # 必須登入才能使用。
-	    'DEFAULT_PERMISSION_CLASSES': (
-#        'rest_framework.permissions.IsAuthenticated',
+        'DEFAULT_PERMISSION_CLASSES': (
+#        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
 	    ),
-#           'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly']
-#            ('rest_framework.permissions.IsAdminUser',),
-#                'PAGE_SIZE': 10
+        'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+        'DEFAULT_PARSER_CLASSES'  : [
+                'rest_framework.parsers.FormParser',
+                'rest_framework.parsers.MultiPartParser',
+                'rest_framework.parsers.JSONParser',
+                                        ]
                 }
+CORS_ORIGIN_ALLOW_ALL = True

@@ -7,11 +7,11 @@ class StorePhotoSerializer(serializers.ModelSerializer):
         fields = ('store_id', 'photos')
 
 class StoreSerializer(serializers.ModelSerializer):
-    photos = StorePhotoSerializer(many=True)
+#   photos = StorePhotoSerializer(many=True)
 
     class Meta:
         model = Store
-        fields = ('id', 'name', 'address', 'phone', 'avg_price', 'provide_by', 'photos', 'tid', 'aid')
+        fields = ('id', 'name', 'address', 'phone', 'avg_price', 'provide_by', 'tid', 'aid')
 
 class StoreTypeSerializer(serializers.ModelSerializer):
     class Meta:
