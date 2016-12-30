@@ -144,3 +144,4 @@ REST_FRAMEWORK = {
                                         ]
                 }
 CORS_ORIGIN_ALLOW_ALL = True
+LOGOUT_URL = 'http://localhost:8001/logout/'

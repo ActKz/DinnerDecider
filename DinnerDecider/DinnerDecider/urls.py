@@ -25,18 +25,18 @@ from django.contrib.auth.models import User
 from account.serializers import PasswordSerializer
 #from flask import Flask
 #from .schema import schema_view
+from .views import schema_view
 
 
-schema_view = get_swagger_view(title='Fxck API')
+#schema_view = get_swagger_view(title='Fxck API')
 
 router = routers.DefaultRouter()
 router.register(r'users', accView.UserViewSet)
-#router.register(r'login', accView.login)
 router.register(r'stores', stoView.StoreViewSet)
 router.register(r'storetype', stoView.StoreTypeViewSet)
 router.register(r'area', stoView.AreaViewSet)
 router.register(r'storephoto', stoView.StorePhotoViewSet)
-#router.register(r'stores', store_views.StoreViewSet)
+router.register(r'search', stoView.SearchViewSet)
 
 
 urlpatterns = [
