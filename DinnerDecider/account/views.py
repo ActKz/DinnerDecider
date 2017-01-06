@@ -12,11 +12,95 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from rest_framework import generics
 from django.contrib.auth import logout as Logout
-from .models import UserFavList
+from .models import UserFavList, UserFavListName
+from store.models import Store
+
+class UserFavListNameViewSet(viewsets.ViewSet):
+    queryset = UserFavListName.objects.all()
+
+    @list_route(methods=['get'], permission_classes=[permissions.IsAuthenticated], url_path='get')
+    def list_listname(self, request):
+        return Response(self.queryset.filter(uid=request.user).values())
+
+    @list_route(methods=['post'], permission_classes=[permissions.IsAuthenticated], url_path='add')
+    def create_listname(self, request):
+        if 'listname' in request.data:
+            uid = User.objects.filter(username=request.user.username).get()
+            self.queryset.create(listname=request.data['listname'],uid=uid)
+            return Response("Success")
+        return Response("Fail",status=400)
+
+    @detail_route(methods=['patch'], permission_classes=[permissions.IsAuthenticated], url_path='update')
+    def update_listname(self, request, pk=None):
+        if pk == None:
+            return Response("Primary key mus be given in url", status=400)
+        if 'listname' in request.data:
+            p = self.queryset.filter(id=pk).update(listname=request.data['listname'])
+            if p > 0:
+                return Response("Success")
+            else:
+                return Response("Update fail",status=400)
+        return Response("Some field are not provided",status=400)
+
+    @detail_route(methods=['delete'], permission_classes=[permissions.IsAuthenticated], url_path='delete')
+    def delete_listname(self, request, pk=None):
+        if pk == None:
+            return Response("Primary key mus be given in url", status=400)
+        obj = self.queryset.get(pk=pk)
+        if obj != None:
+            obj.delete()
+            return Response("Success")
+        else:
+            return Response("List does not exist",status=400)
 
 
-#class UserFavListViewSet(viewsets.ViewSet):
-#    queryset = UserFavList.objects.all()
+class UserFavListViewSet(viewsets.ViewSet):
+    queryset = UserFavList.objects.all()
+    fields = ('listname_id', 'favlist_id', 'sid')
+
+    @list_route(methods=['post'], permission_classes=[permissions.IsAuthenticated], url_path='add')
+    def create_favlist(self, request):
+        if all(key in request.data for key in ('listname_id','sid')):
+            uid = User.objects.filter(username=request.user.username).get()
+            sid = Store.objects.filter(id=request.data['sid']).get()
+            listname = UserFavListName.objects.filter(pk=request.data['listname_id']).get()
+            p = self.queryset.create(uid=uid, sid=sid, name=listname)
+            if p != None:
+                return Response("Success")
+            else:
+                return Response("Create fail",status=400)
+        else:
+            return Response("Some field are not provided",status=400)
+
+    @list_route(methods=['get'], permission_classes=[permissions.IsAuthenticated], url_path='get')
+    def list_favlist(self, request):
+        res = self.queryset.filter(uid__username=request.user.username).values('sid__name','sid__address','sid__phone','sid__provide_by','sid__avg_price','sid__type','sid__type__name','sid__area','sid__area__name','sid__id','name__listname','uid__username','id')
+        return Response(res)
+
+    @detail_route(methods=['delete'], permission_classes=[permissions.IsAuthenticated], url_path='delete')
+    def delete_favlist(self, request, pk=None):
+        if pk == None:
+            return Response("Primary key mus be given in url", status=400)
+        obj = self.queryset.get(pk=pk)
+        if obj != None:
+            obj.delete()
+            return Response("Success")
+        else:
+            return Response("List does not exist",status=400)
+
+    @detail_route(methods=['patch'], permission_classes=[permissions.IsAuthenticated], url_path='update')
+    def update_favlist(self, request, pk=None):
+
+        if pk == None:
+            return Response("Primary key mus be given in url", status=400)
+        if all(key in request.data for key in self.fields):
+            obj = self.queryset.filter(pk=pk).update(name=request.data['listname_id'])
+            if obj > 0:
+                return Response("Success")
+            else:
+                return Response("List does not exist",status=400)
+        else:
+            return Response("Some field are not provided",status=400)
 
 class UserViewSet(viewsets.ViewSet):
     """

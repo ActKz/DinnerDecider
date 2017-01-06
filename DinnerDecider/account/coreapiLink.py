@@ -131,4 +131,172 @@ link = {
             fields = []
             ),
     },
+    "User Favorite list":{
+        "Add": coreapi.Link(
+            url = '/favlist/add/',
+            description = "Add favorite list",
+            action = 'post',
+            fields = [
+                coreapi.Field(
+                    name = 'Authorization',
+                    required = False,
+                    location = 'header',
+                    description = 'JWT token'
+                    ),
+                coreapi.Field(
+                    name = 'sid',
+                    required = True,
+                    location = 'form',
+                    description = 'store id'
+                    ),
+                coreapi.Field(
+                    name = 'listname_id',
+                    required = True,
+                    location = 'form',
+                    description = 'Favorite list name'
+                    ),
+                ]
+            ),
+        "List": coreapi.Link(
+            url = '/favlist/get/',
+            description = 'List favorite list',
+            action = 'get',
+            fields = [
+                coreapi.Field(
+                    name = 'Authorization',
+                    required = False,
+                    location = 'header',
+                    description = 'JWT token'
+                    ),
+                ]
+            ),
+        "Delete": coreapi.Link(
+            url = '/favlist/{favlist_id}/delete/',
+            description = 'Delete favorite list element',
+            action = 'delete',
+            fields = [
+                coreapi.Field(
+                    name = 'Authorization',
+                    required = False,
+                    location = 'header',
+                    description = 'JWT token'
+                    ),
+                coreapi.Field(
+                    name = 'favlist_id',
+                    required = True,
+                    location = 'path',
+                    description = 'List element id'
+                    ),
+                ]
+            ),
+        "Update": coreapi.Link(
+            url = '/favlist/{favlist_id}/update/',
+            description = 'Change the elements\' listname',
+            action = 'patch',
+            fields = [
+                coreapi.Field(
+                    name = 'Authorization',
+                    required = False,
+                    location = 'header',
+                    description = 'JWT token'
+                    ),
+                coreapi.Field(
+                    name = 'favlist_id',
+                    required = True,
+                    location = 'path',
+                    description = 'List element id'
+                    ),
+                coreapi.Field(
+                    name = 'listname_id',
+                    required = True,
+                    location = 'form',
+                    description = 'List name id'
+                    ),
+                coreapi.Field(
+                    name = 'sid',
+                    required = True,
+                    location = 'form',
+                    description = 'store id'
+                    ),
+                ]
+            ),
+        },
+    "User Favorite List Name":{
+        "List": coreapi.Link(
+            url = '/favlistname/get/',
+            description = 'List all listname',
+            action = 'get',
+            fields = [
+                coreapi.Field(
+                    name = 'Authorization',
+                    required = False,
+                    location = 'header',
+                    description = 'JWT token'
+                    ),
+                ]
+            ),
+        "Add": coreapi.Link(
+            url = '/favlistname/add/',
+            description = 'Add new favorite list',
+            action = 'post',
+            fields = [
+                coreapi.Field(
+                    name = 'Authorization',
+                    required = False,
+                    location = 'header',
+                    description = 'JWT token'
+                    ),
+                coreapi.Field(
+                    name = 'listname',
+                    required = True,
+                    location = 'form',
+                    description = 'List name'
+                    ),
+                ]
+            ),
+        "Update": coreapi.Link(
+            url = '/favlistname/{listname_id}/update/',
+            description = 'Change list name',
+            action = 'patch',
+            fields = [
+                coreapi.Field(
+                    name = 'Authorization',
+                    required = False,
+                    location = 'header',
+                    description = 'JWT token'
+                    ),
+                coreapi.Field(
+                    name = 'listname_id',
+                    required = True,
+                    location = 'path',
+                    description = 'Listname id'
+                    ),
+                coreapi.Field(
+                    name = 'listname',
+                    required = True,
+                    location = 'form',
+                    description = 'List name'
+                    ),
+                ]
+            ),
+        "Delete": coreapi.Link(
+            url = '/favlistname/{listname_id}/delete/',
+            description = 'Delete list',
+            action = 'delete',
+            fields = [
+                coreapi.Field(
+                    name = 'Authorization',
+                    required = False,
+                    location = 'header',
+                    description = 'JWT token'
+                    ),
+                coreapi.Field(
+                    name = 'listname_id',
+                    required = True,
+                    location = 'path',
+                    description = 'Listname id'
+                    ),
+                ]
+            ),
+        },
 }

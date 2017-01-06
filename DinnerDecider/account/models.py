@@ -6,10 +6,17 @@ from store.models import Store
 # Create your models here.
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-#class UserFavList(models.Model):
-#    uid = models.ForeignKey('User', on_delete = models.CASCADE)
-#    sid = models.ForeignKey('Store', on_delete = models.CASCADE)
-#    listname = models.CharField(max_length=40)
+class UserFavListName(models.Model):
+    uid = models.ForeignKey(User, on_delete = models.CASCADE)
+    listname = models.CharField(max_length=40)
+
+class UserFavList(models.Model):
+    uid = models.ForeignKey(User, on_delete = models.CASCADE)
+    sid = models.ForeignKey('store.Store', on_delete = models.CASCADE)
+    name = models.ForeignKey('UserFavListName', on_delete= models.CASCADE)
+
+
+
 #class UserManager(BaseUserManager):
 #   def create_user(self, username, email, password):
 #       if not username or not email or not password:
