@@ -11,7 +11,7 @@ content.update(stoAPI.link)
 
 document = coreapi.Document(
                 title='DinnerDecider API',
-                url='http://140.113.27.54:8001',
+                url='https://remdomdinner.nctu.me/',
                 content=content
 )
 

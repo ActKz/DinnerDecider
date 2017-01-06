@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = 'hv7+)e!ud%8a+!t!xx#r56xb0b0d7yj#svsz99beef7v*!i5iw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['140.113.27.54',]
+ALLOWED_HOSTS = ['remdomdinner.nctu.me','140.113.27.54',]
 
 
 # Application definition
@@ -43,6 +44,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_swagger',
     'rest_framework_docs',
+    'rest_framework_jwt',
+    "sslserver",
 ]
 
 MIDDLEWARE = [
@@ -54,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'DinnerDecider.urls'
@@ -131,6 +135,7 @@ REST_FRAMEWORK = {
 	        'rest_framework.authentication.SessionAuthentication',
                 'rest_framework.authentication.BasicAuthentication',
                 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+
 	    ),
 	    # 必須登入才能使用。
         'DEFAULT_PERMISSION_CLASSES': (
@@ -144,4 +149,11 @@ REST_FRAMEWORK = {
                                         ]
                 }
 CORS_ORIGIN_ALLOW_ALL = True
-LOGOUT_URL = 'http://localhost:8001/logout/'
+LOGIN_URL = "https://remdomdinner.nctu.me/api-auth/login/"
+LOGOUT_URL = 'https://remdomdinner.nctu.me/api-auth/logout/'
+JWT_AUTH = {
+            'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
+            'JWT_ALLOW_REFRESH': True,
+            'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+        }
+STATIC_ROOT = '/tmp/gg'

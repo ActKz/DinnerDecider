@@ -16,3 +16,8 @@ class PasswordSerializer(serializers.Serializer):
 #   class Meta:
 #       model = User
 #       fields = ('password')
+
+class UserSearchSerializer(serializers.BaseSerializer):
+    name = serializers.CharField()
+    def to_representation(self, obj):
+        return {'name', obj.name}
