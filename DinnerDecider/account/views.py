@@ -62,19 +62,42 @@ class UserFavListViewSet(viewsets.ViewSet):
     def create_favlist(self, request):
         if all(key in request.data for key in ('listname_id','sid')):
             uid = User.objects.filter(username=request.user.username).get()
-            sid = Store.objects.filter(id=request.data['sid']).get()
             listname = UserFavListName.objects.filter(pk=request.data['listname_id']).get()
-            p = self.queryset.create(uid=uid, sid=sid, name=listname)
-            if p != None:
-                return Response("Success")
-            else:
-                return Response("Create fail",status=400)
+            for k in request.data['sid']:
+                sid = Store.objects.filter(id=k).get()
+                p = self.queryset.create(uid=uid, sid=sid, name=listname)
+            return Response("Success")
         else:
             return Response("Some field are not provided",status=400)
 
     @list_route(methods=['get'], permission_classes=[permissions.IsAuthenticated], url_path='get')
     def list_favlist(self, request):
-        res = self.queryset.filter(uid__username=request.user.username).values('sid__name','sid__address','sid__phone','sid__provide_by','sid__avg_price','sid__type','sid__type__name','sid__area','sid__area__name','sid__id','name__listname','uid__username','id')
+#       res = self.queryset.filter(uid__username=request.user.username).values('sid__name','sid__address','sid__phone','sid__provide_by','sid__avg_price','sid__type','sid__type__name','sid__area','sid__area__name','sid__id','name__listname','uid__username','id')
+        listname = UserFavListName.objects.filter(uid=request.user).values()
+        res = []
+        for i in listname:
+            lists = []
+            p = self.queryset.values('sid__name','sid__address','sid__phone','sid__provide_by','sid__avg_price','sid__type','sid__type__name','sid__area','sid__area__name','sid__id','name__listname','uid__username','id').filter(uid__username=request.user.username, name__listname=i['listname'])
+            for j in p:
+                lists.append({
+                    "listId": j['id'],
+                    "name": j['sid__name'],
+                    "address": j['sid__address'],
+                    "phone": j['sid__phone'],
+                    "provide_by": j['sid__provide_by'],
+                    "avg_price": j['sid__avg_price'],
+                    "type": j['sid__type'],
+                    "type__name": j['sid__type__name'],
+                    "area": j['sid__area'],
+                    "area__name": j['sid__area__name'],
+                    "id": j['sid__id'],
+                    })
+            res.append({
+                "user": request.user.username,
+                "listname": i['listname'],
+                "storesData": lists,
+                })
+
         return Response(res)
 
     @detail_route(methods=['delete'], permission_classes=[permissions.IsAuthenticated], url_path='delete')

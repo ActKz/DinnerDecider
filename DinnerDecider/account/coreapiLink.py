@@ -147,7 +147,8 @@ link = {
                     name = 'sid',
                     required = True,
                     location = 'form',
-                    description = 'store id'
+                    description = 'store id',
+                    type = 'array'
                     ),
                 coreapi.Field(
                     name = 'listname_id',
