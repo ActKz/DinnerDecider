@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'rest_framework_docs',
     'rest_framework_jwt',
-    "sslserver",
+    'sslserver',
 ]
 
 MIDDLEWARE = [
@@ -146,7 +146,8 @@ REST_FRAMEWORK = {
                 'rest_framework.parsers.FormParser',
                 'rest_framework.parsers.MultiPartParser',
                 'rest_framework.parsers.JSONParser',
-                                        ]
+                                        ],
+        'TEST_REQUEST_DEFAULT_FORMAT': 'json'
                 }
 CORS_ORIGIN_ALLOW_ALL = True
 LOGIN_URL = "https://remdomdinner.nctu.me/api-auth/login/"

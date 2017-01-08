@@ -62,6 +62,12 @@ link = {
                     location = 'form',
                     description = 'Store area id'
                     ),
+                coreapi.Field(
+                    name = 'image_url',
+                    required = False,
+                    location = 'form',
+                    description = 'Store picture'
+                    ),
                 ]
             ),
         'Store info': coreapi.Link(
@@ -129,7 +135,13 @@ link = {
                     required = True,
                     location = 'form',
                     description = 'Store area'
-                    )
+                    ),
+                coreapi.Field(
+                    name = 'image_url',
+                    required = False,
+                    location = 'form',
+                    description = 'Store picture'
+                    ),
                 ]
             ),
         'Delete store': coreapi.Link(

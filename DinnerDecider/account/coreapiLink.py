@@ -234,6 +234,12 @@ link = {
                     location = 'header',
                     description = 'JWT token'
                     ),
+                coreapi.Field(
+                    name = 'listname',
+                    required = False,
+                    location = 'query',
+                    description = 'Favorite list name'
+                    ),
                 ]
             ),
         "Add": coreapi.Link(

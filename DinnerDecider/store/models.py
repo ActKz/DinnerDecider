@@ -1,8 +1,5 @@
 from django.db import models
 
-class StorePhoto(models.Model):
-    store_id = models.ForeignKey('Store', on_delete=models.CASCADE)
-    photos = models.URLField()
 
 class StoreType(models.Model):
     id = models.AutoField(primary_key=True)
@@ -20,5 +17,6 @@ class Store(models.Model):
     provide_by = models.CharField(max_length=15)
     type = models.ForeignKey('StoreType', null=True, on_delete=models.SET_NULL)
     area = models.ForeignKey('Area', null=True, on_delete=models.SET_NULL)
+    image_url = models.URLField(null=True)
 
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, serializers, permissions
-from .models import Store, StorePhoto, StoreType, Area
-from .serializers import StoreTypeSerializer, AreaSerializer, StorePhotoSerializer
+from .models import Store, StoreType, Area
+from .serializers import StoreTypeSerializer, AreaSerializer
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from django.db.models.query_utils import Q
@@ -15,11 +15,11 @@ class StoreViewSet(viewsets.ViewSet):
     @list_route(methods=['get'], url_path='get')
     def store_info(self, request ):
         if 'id' in request.query_params:
-            obj = self.queryset.filter(id=request.query_params['id']).values('name','address','phone','provide_by','avg_price','type','type__name','area','area__name','id')
+            obj = self.queryset.filter(id=request.query_params['id']).values('name','address','phone','provide_by','avg_price','type','type__name','area','area__name','id','image_url')
             if obj != None:
                 return Response(obj)
             else:
-                return Response("No such store")
+                return Response("No such store",status=400)
         else:
             return Response("Primary key must be given in query",status=400)
 
@@ -28,14 +28,14 @@ class StoreViewSet(viewsets.ViewSet):
     def list_store(self, request):
         r = request.query_params
         if 'keyword' in r:
-            res = Store.objects.values('name','address','phone','provide_by','avg_price','type','type__name','area','area__name','id').filter(Q(name__icontains=r['keyword']) |
+            res = Store.objects.values('name','address','phone','provide_by','avg_price','type','type__name','area','area__name','id','image_url').filter(Q(name__icontains=r['keyword']) |
                     Q(address__icontains=r['keyword']) |
                     Q(phone__icontains=r['keyword']) |
                     Q(provide_by__icontains=r['keyword']) |
                     Q(type__name__icontains=r['keyword']) |
                     Q(area__name__icontains=r['keyword']) )
         else:
-            res = Store.objects.values('name','address','phone','provide_by','avg_price','type','type__name','area','area__name','id')
+            res = Store.objects.values('name','address','phone','provide_by','avg_price','type','type__name','area','area__name','id','image_url')
         return Response(res)
 
     @list_route(methods=['post'], url_path='add', permission_classes=[permissions.IsAuthenticated])
@@ -45,6 +45,8 @@ class StoreViewSet(viewsets.ViewSet):
         if all(key in data for key in fields):
             type = StoreType.objects.get(pk=data['tid'])
             area = Area.objects.get(pk=data['aid'])
+            if not 'image_url' in data:
+                data['image_url'] = None
             store = Store(
                     name = data['name'],
                     address = data['address'],
@@ -53,6 +55,7 @@ class StoreViewSet(viewsets.ViewSet):
                     provide_by = request.user.username,
                     type = type,
                     area = area,
+                    image_url = data['image_url'],
                     )
             store.save()
             return Response("Success")
@@ -69,6 +72,8 @@ class StoreViewSet(viewsets.ViewSet):
             if all(key in data for key in fields):
                 type = StoreType.objects.get(pk=data['tid'])
                 area = Area.objects.get(pk=data['aid'])
+                if not 'image_url' in data:
+                    data['image_url'] = None
                 store = Store(
                         id = pk,
                         name = data['name'],
@@ -78,13 +83,12 @@ class StoreViewSet(viewsets.ViewSet):
                         provide_by = request.user.username,
                         type = type,
                         area = area,
+                        image_url = data['image_url']
                         )
                 store.save()
                 return Response("Success")
             else:
                 return Response("Some fields are not given",status=400)
-
-        return Response("ZZ")
 
     @detail_route(methods=['delete'], url_path='delete', permission_classes=[permissions.IsAuthenticated])
     def delete_store(self, request, pk=None):
@@ -108,16 +112,14 @@ class AreaViewSet(viewsets.ModelViewSet):
     serializer_class = AreaSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-class StorePhotoViewSet(viewsets.ModelViewSet):
-    queryset = StorePhoto.objects.all()
-    serializer_class = StorePhotoSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+#class StorePhotoViewSet(viewsets.ModelViewSet):
+#    queryset = StorePhoto.objects.all()
+#    serializer_class = StorePhotoSerializer
+#    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 class SearchViewSet(viewsets.ViewSet):
     queryset = Store.objects.all()
 
-    def get_serializer_class(self):
-        return self.serializer_class
     @list_route(methods=['get'], url_path='store')
     def fuzzy_search(self, request):
         if 'keyword' in request.query_params and request.query_params['keyword'] != "":

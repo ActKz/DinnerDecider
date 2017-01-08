@@ -8,26 +8,30 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework.request import Request
 from django.core.validators import *
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import IntegrityError
-from rest_framework import generics
 from django.contrib.auth import logout as Logout
 from .models import UserFavList, UserFavListName
 from store.models import Store
+from django.forms import model_to_dict
+from django.db.models import F
 
 class UserFavListNameViewSet(viewsets.ViewSet):
     queryset = UserFavListName.objects.all()
 
     @list_route(methods=['get'], permission_classes=[permissions.IsAuthenticated], url_path='get')
     def list_listname(self, request):
-        return Response(self.queryset.filter(uid=request.user).values())
+        if 'listname' in request.query_params:
+            return Response(self.queryset.filter(listname=request.query_params['listname']).values('id'))
+        else:
+            return Response(self.queryset.filter(uid=request.user).values('id', 'listname'))
 
     @list_route(methods=['post'], permission_classes=[permissions.IsAuthenticated], url_path='add')
     def create_listname(self, request):
         if 'listname' in request.data:
             uid = User.objects.filter(username=request.user.username).get()
-            self.queryset.create(listname=request.data['listname'],uid=uid)
-            return Response("Success")
+            obj = self.queryset.create(listname=request.data['listname'],uid=uid)
+            return Response(model_to_dict(obj))
         return Response("Fail",status=400)
 
     @detail_route(methods=['patch'], permission_classes=[permissions.IsAuthenticated], url_path='update')
@@ -63,9 +67,14 @@ class UserFavListViewSet(viewsets.ViewSet):
         if all(key in request.data for key in ('listname_id','sid')):
             uid = User.objects.filter(username=request.user.username).get()
             listname = UserFavListName.objects.filter(pk=request.data['listname_id']).get()
+            if listname == None:
+                return Response("List does not exist",status=400)
             for k in request.data['sid']:
-                sid = Store.objects.filter(id=k).get()
-                p = self.queryset.create(uid=uid, sid=sid, name=listname)
+                try:
+                    sid = Store.objects.filter(id=k).get()
+                    p = self.queryset.get_or_create(uid=uid, sid=sid, name=listname)
+                except ObjectDoesNotExist:
+                    continue
             return Response("Success")
         else:
             return Response("Some field are not provided",status=400)
@@ -80,7 +89,7 @@ class UserFavListViewSet(viewsets.ViewSet):
             p = self.queryset.values('sid__name','sid__address','sid__phone','sid__provide_by','sid__avg_price','sid__type','sid__type__name','sid__area','sid__area__name','sid__id','name__listname','uid__username','id').filter(uid__username=request.user.username, name__listname=i['listname'])
             for j in p:
                 lists.append({
-                    "listId": j['id'],
+                    "favlistId": j['id'],
                     "name": j['sid__name'],
                     "address": j['sid__address'],
                     "phone": j['sid__phone'],
@@ -96,6 +105,7 @@ class UserFavListViewSet(viewsets.ViewSet):
                 "user": request.user.username,
                 "listname": i['listname'],
                 "storesData": lists,
+                "listname_id": i['id']
                 })
 
         return Response(res)

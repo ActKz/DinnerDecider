@@ -22,7 +22,6 @@ from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from rest_framework_swagger.views import get_swagger_view
 from django.contrib.auth.models import User
-from account.serializers import PasswordSerializer
 from .views import schema_view
 
 
@@ -33,7 +32,6 @@ router.register(r'users', accView.UserViewSet)
 router.register(r'stores', stoView.StoreViewSet)
 router.register(r'storetype', stoView.StoreTypeViewSet)
 router.register(r'area', stoView.AreaViewSet)
-router.register(r'storephoto', stoView.StorePhotoViewSet)
 router.register(r'search', stoView.SearchViewSet)
 router.register(r'favlist', accView.UserFavListViewSet)
 router.register(r'favlistname', accView.UserFavListNameViewSet)
