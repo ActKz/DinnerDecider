@@ -39,3 +39,19 @@ python mange.py migrate
 ```
 python manage.py runsslserver
 ```
+
+## Run test
+
+### No testing details
+
+```
+cd DinnerDecider
+python manage.py test
+```
+
+### Show coverage and testing details
+
+This will run `python manage.py test` , use [coverage](https://coverage.readthedocs.io/en/coverage-4.3.1/) to detect the testing coverage and generate report to http://0.0.0.0:8000
+```
+./gen_coverage_report
+```
