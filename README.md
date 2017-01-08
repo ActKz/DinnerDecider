@@ -13,6 +13,7 @@
 ## Feature
 
 - Browsable API by using django-rest-swagger
+- Self defined models CRUD
   - Account C/R/U
   - Store C/R/U/D
   - Store Type C/R/D
