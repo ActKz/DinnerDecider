@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'store',
     'corsheaders',
     'rest_framework_swagger',
-    'rest_framework_docs',
     'rest_framework_jwt',
     'sslserver',
 ]
@@ -141,7 +140,6 @@ REST_FRAMEWORK = {
         'DEFAULT_PERMISSION_CLASSES': (
 #        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
 	    ),
-        'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
         'DEFAULT_PARSER_CLASSES'  : [
                 'rest_framework.parsers.FormParser',
                 'rest_framework.parsers.MultiPartParser',
