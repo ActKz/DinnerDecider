@@ -13,13 +13,36 @@
 ## Feature
 
 - Browsable API by using django-rest-swagger
-- Self defined models CRUD
-  - Account C/R/U
-  - Store C/R/U/D
-  - Store Type C/R/D
-  - Area C/R/D
-  - User favorite list C/R/U/D
-  - User favorite listname C/R/U/D
+- API
+  - User
+    - create account
+    - change password
+    - change email
+    - user info
+  - Store
+    - add  store
+    - update store
+    - list store: fuzzy search for several fields
+    - get store
+    - delete store
+  - Store Type
+    - add type
+    - list type
+    - delete type
+  - Store Area
+    - add area
+    - list area
+    - delete area
+  - User favorite list
+    - add list
+    - list list
+    - update list
+    - delete list
+  - User favorite list element
+    - add element
+    - list element
+    - delete element
+
 
 ## Usage
 
