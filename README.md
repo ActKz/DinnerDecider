@@ -58,6 +58,10 @@ python manage.py makemigrations
 python mange.py migrate
 ```
 
+### Modify settings to fit your domain/ip
+- DinnderDecider/settings.py
+- DinnderDecider/views.py
+
 ### Run server
 ```
 python manage.py runsslserver
