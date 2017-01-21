@@ -82,3 +82,60 @@ This will run `python manage.py test` , use [coverage](https://coverage.readthed
 ```
 ./gen_coverage_report
 ```
+
+## API Fields Define
+Fields may appear in required fields or response data.
+
+### User
+
+Field name | Description
+--- | ---
+username | Account name
+password | Account password
+email | Account email
+last_login | User last login time
+date_joined | Acount created date
+
+### UserFavList
+
+Field name | Description
+--- | ---
+listName_id | List's unique id
+listName | List's name
+
+### UserFavListElement
+Field name | Description
+--- | ---
+listElement_id | List element's unique id, **appear in storesData**
+username | Account name
+listName_id | List's unique id
+listName | List's name
+*storesData* | Contain all the store's fields
+
+### Store
+Field name | Description
+--- | ---
+store_id | Store unique id
+store_name | Store's name
+store_address | Store's address
+store_phone | Store's phone
+store_type | Store type's name
+store_typeId | Store type's unique id
+store_area | Store area's name
+store_areaId | Store area's unique id
+store_avgPrice | Store's average price
+store_imgURL | Store's image url
+info_provider | Account name who gives these informations
+keyword | Keyword used to search for stores
+
+### Store Type
+Field name | Description
+--- | ---
+store_type | Store type's name
+store_typeId | Store type's unique id
+
+### Store Area
+Field name | Description
+--- | ---
+store_area | Store area's name
+store_areaId | Store area's unique id
